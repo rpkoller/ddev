@@ -34,6 +34,7 @@ ddev composer create "typo3/cms-base-distribution:^10"
 ddev composer create drupal/recommended-project --no-install
 ddev composer create --repository=https://repo.magento.com/ magento/project-community-edition
 ddev composer create --prefer-dist --no-interaction --no-dev psr/log
+ddev composer create --preserve-flags --no-interaction psr/log
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		yesFlag, _ := cmd.Flags().GetBool("yes")
