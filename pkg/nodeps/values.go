@@ -103,6 +103,7 @@ const (
 	// AppTypeDrupal is an alias for "most recent Drupal version"
 	AppTypeDrupal       = "drupal"
 	AppTypeGeneric      = "generic"
+	AppTypeJoomla       = "joomla"
 	AppTypeLaravel      = "laravel"
 	AppTypeSilverstripe = "silverstripe"
 	AppTypeSymfony      = "symfony"

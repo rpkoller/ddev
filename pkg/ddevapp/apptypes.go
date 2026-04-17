@@ -209,6 +209,11 @@ func init() {
 			postStartAction: nil,
 		},
 
+		nodeps.AppTypeJoomla: {
+			appTypeDetect: isJoomlaApp,
+			uploadDirs:    getJoomlaUploadDirs,
+		},
+
 		nodeps.AppTypeLaravel: {
 			appTypeDetect:   isLaravelApp,
 			postStartAction: laravelPostStartAction,
