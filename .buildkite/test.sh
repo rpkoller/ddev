@@ -9,7 +9,7 @@ export GIT_PAGER=""
 # We can skip builds with commit message of [skip buildkite] or [skip ci]
 DDEV_COMMIT_MESSAGE=$(git log -1 --pretty=%s 2>/dev/null || echo "")
 if [[ ${BUILDKITE_MESSAGE:-} == *"[skip buildkite]"* ]] || [[ ${BUILDKITE_MESSAGE:-} == *"[skip ci]"* ]] || [[ ${DDEV_COMMIT_MESSAGE} == *"[skip buildkite]"* ]] || [[ ${DDEV_COMMIT_MESSAGE} == *"[skip ci]"* ]]; then
-  echo "Skipping build because message has '[skip buildkite]' or '[skip ci]':"
+  echo "+++ SKIP: Build skipped due to commit message"
   echo "BUILDKITE_MESSAGE=${BUILDKITE_MESSAGE:-}"
   echo "DDEV_COMMIT_MESSAGE=${DDEV_COMMIT_MESSAGE}"
   exit 0
@@ -318,7 +318,8 @@ if [ "${BUILDKITE_PULL_REQUEST:-false}" != "false" ]; then
   MERGE_BASE=$(git merge-base HEAD refs/remotes/origin/${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-})
   # Check if there are any changes in the specified directories or files since the merge base
   if ! git diff --name-only "$MERGE_BASE" | grep -E '^(\.buildkite/|Makefile$|pkg/|cmd/|vendor/|winpkg/|go\.)' >/dev/null; then
-    echo "Skipping buildkite build since no code changes found"
+    echo "+++ SKIP: No relevant code changes found"
+    echo "No changes in: .buildkite/, Makefile, pkg/, cmd/, vendor/, winpkg/, go.*"
     exit 0
   fi
 
@@ -353,7 +354,7 @@ echo "--- Running tests..."
 if [ "${os:-}" = "windows" ]; then
   echo "--- Running Windows installer tests first..."
   export DDEV_TEST_USE_REAL_INSTALLER=true
-  make testwininstaller TESTARGS="${TESTARGS:-}" | sed -u 's/^--- /=== /; /\//!s/^=== RUN /--- RUN /'
+  make testwininstaller TESTARGS="${TESTARGS:-}" | sed -u 's/^--- FAIL:/+++ FAIL:/; /\//!s/^=== RUN /--- RUN /'
   INSTALLER_RV=$?
   if [ $INSTALLER_RV -ne 0 ]; then
     echo "Windows installer tests failed with status=$INSTALLER_RV"
@@ -362,7 +363,7 @@ if [ "${os:-}" = "windows" ]; then
   echo "Windows installer tests completed successfully"
 fi
 
-make ${MAKE_TARGET:-test} TESTARGS="${TESTARGS:-}" TESTPKG="${TESTPKG:-}" TESTFILE="${TESTFILE:-}" | sed -u 's/^--- /=== /; /\//!s/^=== RUN /--- RUN /'
+make ${MAKE_TARGET:-test} TESTARGS="${TESTARGS:-}" TESTPKG="${TESTPKG:-}" TESTFILE="${TESTFILE:-}" | sed -u 's/^--- FAIL:/+++ FAIL:/; /\//!s/^=== RUN /--- RUN /'
 RV=$?
 echo "test.sh completed with status=$RV"
 ddev poweroff || true
