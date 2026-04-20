@@ -122,7 +122,7 @@ $(GOTMP)/bin/darwin_arm64/mkcert $(GOTMP)/bin/darwin_amd64/mkcert $(GOTMP)/bin/l
 	mkdir -p $(GOTMP)/bin/$${GOOS}_$${GOARCH} && \
 	$(CURL) --fail -JL -s -S --retry 5 --retry-delay 5 --retry-connrefused --retry-all-errors -o $(GOTMP)/bin/$${GOOS}_$${GOARCH}/mkcert "https://github.com/FiloSottile/mkcert/releases/download/$${MKCERT_VERSION}/mkcert-$${MKCERT_VERSION}-$${GOOS}-$${GOARCH}" && chmod +x $(GOTMP)/bin/$${GOOS}_$${GOARCH}/mkcert
 
-TEST_TIMEOUT=4h
+TEST_TIMEOUT=6h
 BUILD_ARCH = $(shell go env GOARCH)
 
 DDEVNAME=ddev
@@ -130,15 +130,6 @@ SHASUM=shasum -a 256
 ifeq ($(BUILD_OS),windows)
 	DDEVNAME=ddev.exe
 	SHASUM=sha256sum
-	TEST_TIMEOUT=6h
-endif
-
-ifeq ($(DDEV_TEST_PODMAN_ROOTLESS),true)
-	TEST_TIMEOUT=6h
-endif
-
-ifeq ($(DDEV_TEST_PODMAN_ROOT),true)
-	TEST_TIMEOUT=6h
 endif
 
 DDEV_PATH=$(PWD)/$(GOTMP)/bin/$(BUILD_OS)_$(BUILD_ARCH)
@@ -170,6 +161,24 @@ testfullsitesetup: $(DEFAULT_BUILD) setup
 	@echo "Running ddev version check..."
 	@$(DDEV_BINARY_FULLPATH) version
 	export PATH="$(DDEV_PATH):$$PATH" DDEV_NO_INSTRUMENTATION=true CGO_ENABLED=$(CGO_ENABLED) DDEV_BINARY_FULLPATH=$(DDEV_BINARY_FULLPATH); go test $(USEMODVENDOR) -p 1 -timeout $(TEST_TIMEOUT) -v -installsuffix static -ldflags " $(LDFLAGS) " ./pkg/ddevapp -run TestDdevFullSiteSetup $(TESTARGS)
+
+testonepkg: $(DEFAULT_BUILD) setup
+	@echo "Running ddev version check..."
+	@$(DDEV_BINARY_FULLPATH) version
+	@if [ -z "$(TESTPKG)" ]; then echo "ERROR: TESTPKG must be set, e.g., make testonepkg TESTPKG=./pkg/dockerutil"; exit 1; fi
+	export PATH="$(DDEV_PATH):$$PATH" DDEV_NO_INSTRUMENTATION=true CGO_ENABLED=$(CGO_ENABLED) DDEV_BINARY_FULLPATH=$(DDEV_BINARY_FULLPATH); go test $(USEMODVENDOR) -p 1 -timeout $(TEST_TIMEOUT) -v -installsuffix static -ldflags " $(LDFLAGS) " $(TESTPKG) $(TESTARGS)
+
+# testonefile runs all tests found in a single _test.go file.
+# Usage: make testonefile TESTFILE=./pkg/ddevapp/ddevapp_test.go [TESTARGS="-count=1"]
+testonefile: $(DEFAULT_BUILD) setup
+	@echo "Running ddev version check..."
+	@$(DDEV_BINARY_FULLPATH) version
+	@if [ -z "$(TESTFILE)" ]; then echo "ERROR: TESTFILE must be set, e.g., make testonefile TESTFILE=./cmd/ddev/cmd/utility-tls-diagnose_test.go"; exit 1; fi
+	@export TESTPKG_DIR=$$(dirname "$(TESTFILE)"); \
+	export TESTFUNCS=$$(grep -E '^func Test' "$(TESTFILE)" | sed 's/func \(Test[^(]*\).*/\1/' | tr '\n' '|' | sed 's/|$$//'); \
+	export PATH="$(DDEV_PATH):$$PATH" DDEV_NO_INSTRUMENTATION=true CGO_ENABLED=$(CGO_ENABLED) DDEV_BINARY_FULLPATH=$(DDEV_BINARY_FULLPATH); \
+	echo "Testing $$TESTPKG_DIR with -run $$TESTFUNCS"; \
+	go test $(USEMODVENDOR) -p 1 -timeout $(TEST_TIMEOUT) -v -installsuffix static -ldflags " $(LDFLAGS) " $$TESTPKG_DIR -run "$$TESTFUNCS" $(TESTARGS)
 
 testwininstaller: windows_amd64_install
 	@echo "Running Windows installer tests..."
