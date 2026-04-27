@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/ddev/ddev/pkg/ddevapp"
+	"github.com/ddev/ddev/pkg/dockerutil"
 	"github.com/ddev/ddev/pkg/exec"
 	"github.com/ddev/ddev/pkg/nodeps"
 	"github.com/ddev/ddev/pkg/testcommon"
@@ -55,6 +56,12 @@ func TestLocalfilePull(t *testing.T) {
 	out, err := exec.RunHostCommand("ddev", "--version")
 	assert.NoError(err)
 	t.Logf("ddev --version=%v", out)
+
+	// Recreate the CI path where the host-side hash persists but the shared
+	// ddev-global-cache volume has been deleted between runs.
+	ddevapp.PowerOff()
+	err = dockerutil.RemoveVolume("ddev-global-cache")
+	require.NoError(t, err)
 
 	testcommon.ClearDockerEnv()
 
