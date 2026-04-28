@@ -875,7 +875,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
 === "Drupal 12 (HEAD)"
 
     !!!warning "Caution"
-    Not for production, there is no stable release yet, so use it at your own risk
+        Not for production, there is no stable release yet, so use it at your own risk.
     
     To experiment with the next major version of Drupal create the project directory and configure DDEV:
 
