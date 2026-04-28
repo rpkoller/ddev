@@ -872,6 +872,61 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
         ./setup-drupal-git.sh
         ```
 
+=== "Drupal 12 (HEAD)"
+
+    !!!warning "Caution"
+    Not for production, there is no stable release yet, so use it at your own risk
+    
+    To experiment with the next major version of Drupal create the project directory and configure DDEV:
+
+    ```bash
+    mkdir -p my-drupal12-site && cd my-drupal12-site
+    ddev config --project-type=drupal12 --docroot=web
+    ```
+
+    Start DDEV (this may take a minute):
+
+    ```bash
+    ddev start
+    ```
+
+    Install Drupal via Composer:
+
+    ```bash
+    ddev composer create-project drupal/recommended-project:main-dev@dev
+    ddev composer require drush/drush
+    ```
+
+    Run Drupal installation and launch:
+
+    ```bash
+    ddev drush site:install --account-name=admin --account-pass=admin -y
+    ddev launch
+    # or automatically log in with:
+    ddev launch $(ddev drush uli)
+    ```
+
+    Read more about: [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs)
+
+    ??? tip "Prefer to run as a script?"
+        To run the whole setup as a script, examine and run this script:
+
+        ```bash
+        cat > setup-drupal12.sh << 'EOF'
+        #!/usr/bin/env bash
+        set -euo pipefail
+        mkdir -p my-drupal12-site && cd my-drupal12-site
+        ddev config --project-type=drupal12 --docroot=web
+        ddev start -y
+        ddev composer create-project drupal/recommended-project:main-dev@dev
+        ddev composer require drush/drush
+        ddev drush site:install --account-name=admin --account-pass=admin -y
+        ddev launch
+        EOF
+        chmod +x setup-drupal12.sh
+        ./setup-drupal12.sh
+        ```
+
 ## ExpressionEngine
 
 === "ExpressionEngine ZIP File Download"
