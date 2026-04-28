@@ -873,11 +873,8 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
         ```
 
 === "Drupal 12 (HEAD)"
-
-    !!!warning "Caution"
-        Not for production, there is no stable release yet, so use it at your own risk.
     
-    To experiment with the next major version of Drupal create the project directory and configure DDEV:
+    Those who want to try out the unreleased upcoming Drupal 12 can install it this way:
 
     ```bash
     mkdir -p my-drupal12-site && cd my-drupal12-site
