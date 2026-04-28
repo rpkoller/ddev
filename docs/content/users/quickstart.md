@@ -654,7 +654,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
     ddev launch $(ddev drush uli)
     ```
 
-    Read more about: [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs)
+    Read more about [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs).
 
     ??? tip "Prefer to run as a script?"
         To run the whole setup as a script, examine and run this script:
@@ -704,7 +704,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
     ddev launch
     ```
 
-    Read more about: [Drupal CMS](https://new.drupal.org/drupal-cms) & [Documentation](https://new.drupal.org/docs/drupal-cms)
+    Read more about [Drupal CMS](https://new.drupal.org/drupal-cms) & [Documentation](https://new.drupal.org/docs/drupal-cms).
 
     ??? tip "Prefer to run as a script?"
         To run the whole setup as a script, examine and run this script:
@@ -756,7 +756,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
     ddev launch $(ddev drush uli)
     ```
 
-    Read more about: [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs)
+    Read more about [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs).
 
     ??? tip "Prefer to run as a script?"
         To run the whole setup as a script, examine and run this script:
@@ -850,7 +850,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
     ddev launch
     ```
 
-    Read more about: [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs)
+    Read more about [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs).
 
     ??? tip "Prefer to run as a script?"
         To run the whole setup as a script, examine and run this script:
@@ -906,7 +906,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
     ddev launch $(ddev drush uli)
     ```
 
-    Read more about: [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs)
+    Read more about [Drupal Core](https://new.drupal.org/about/overview/technical) & [Documentation](https://www.drupal.org/docs).
 
     ??? tip "Prefer to run as a script?"
         To run the whole setup as a script, examine and run this script:
