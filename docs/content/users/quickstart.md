@@ -873,7 +873,7 @@ Set [`composer_root`](./configuration/config.md#composer_root) to the subdirecto
         ```
 
 === "Drupal 12 (HEAD)"
-    
+
     Those who want to try out the unreleased upcoming Drupal 12 can install it this way:
 
     ```bash
